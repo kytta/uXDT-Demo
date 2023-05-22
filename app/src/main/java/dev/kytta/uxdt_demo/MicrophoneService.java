@@ -18,16 +18,15 @@ import androidx.core.content.ContextCompat;
 
 public class MicrophoneService extends Service {
     private static final int NOTIFICATION_ID = 1;
-    private static final String CHANNEL_ID = "recording_status";
+    private static final String CHANNEL_ID = "microphone_recording_status";
     private AudioRecord audioRecord;
     private boolean isRecording = false;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        // Create the notification channel for Android Oreo and above
-        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Recording Status", NotificationManager.IMPORTANCE_LOW);
-        channel.setDescription("Will show a persistent notification when the app is recording the surroundings.");
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Microphone Status", NotificationManager.IMPORTANCE_LOW);
+        channel.setDescription("Will show a persistent notification when the app is recording the surroundings using the microphone.");
         NotificationManager notificationManager = getSystemService(NotificationManager.class);
         notificationManager.createNotificationChannel(channel);
     }
