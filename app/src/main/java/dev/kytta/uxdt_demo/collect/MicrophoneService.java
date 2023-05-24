@@ -90,7 +90,7 @@ public class MicrophoneService extends Service {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ic_microphone)
                 .setContentTitle("Listening...")
                 .setContentText("The app is currently listening using the microphone.")
                 .setContentIntent(pendingIntent)

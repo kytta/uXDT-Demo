@@ -94,7 +94,7 @@ public class GyroscopeService extends Service implements SensorEventListener {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ic_gyroscope)
                 .setContentTitle("Collecting...")
                 .setContentText("The app is currently collecting gyroscope data.")
                 .setContentIntent(pendingIntent)
