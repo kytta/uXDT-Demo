@@ -55,6 +55,7 @@ public class GyroscopeService extends Service implements SensorEventListener {
             return;
         }
 
+        Log.i(TAG, "Gyroscope sampling rate: " + 1000000 / gyroscopeSensor.getMinDelay() + " Hz");
         sensorManager.registerListener(this, gyroscopeSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
     }

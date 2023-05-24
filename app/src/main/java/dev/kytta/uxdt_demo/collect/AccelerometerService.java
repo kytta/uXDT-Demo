@@ -51,6 +51,7 @@ public class AccelerometerService extends Service implements SensorEventListener
             return;
         }
 
+        Log.i(TAG, "Accelerometer sampling rate: " + 1000000 / accelerometerSensor.getMinDelay() + " Hz");
         sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
