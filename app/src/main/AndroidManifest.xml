@@ -23,6 +23,7 @@
 
         <service android:name=".collect.MicrophoneService" />
         <service android:name=".collect.GyroscopeService" />
+        <service android:name=".collect.AccelerometerService" />
     </application>
 
 </manifest>

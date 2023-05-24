@@ -11,4 +11,9 @@
     <string name="collecting">Collecting…</string>
     <string name="notif_gyroscope">The app is currently collecting gyroscope data.</string>
     <string name="gyroscope_ticker">The application has started collecting gyroscope data.</string>
+    <string name="notif_accelerometer">The app is currently collecting accelerometer data.</string>
+    <string name="accelerometer_ticker">The application has started collecting accelerometer data.</string>
+    <string name="microphone_switch_text">Record surrounding sound</string>
+    <string name="gyroscope_switch_text">Collect gyroscopic data</string>
+    <string name="accelerometer_switch_text">Collect accelerometer data</string>
 </resources>

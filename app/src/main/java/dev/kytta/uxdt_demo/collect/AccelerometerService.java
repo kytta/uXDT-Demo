@@ -11,22 +11,18 @@ import android.hardware.SensorManager;
 import android.os.IBinder;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import dev.kytta.uxdt_demo.Constants;
 import dev.kytta.uxdt_demo.MainActivity;
 import dev.kytta.uxdt_demo.R;
 
-public class GyroscopeService extends Service implements SensorEventListener {
-    private final static String TAG = "GyroscopeService";
+public class AccelerometerService extends Service implements SensorEventListener {
+    private final static String TAG = "AccelerometerService";
 
-    private static final int NOTIFICATION_ID = 2;
+    private static final int NOTIFICATION_ID = 3;
     private SensorManager sensorManager;
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -47,25 +43,22 @@ public class GyroscopeService extends Service implements SensorEventListener {
         Log.d(TAG, "startCollectingData()");
 
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        Sensor gyroscopeSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        Sensor accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
-        if (gyroscopeSensor == null) {
+        if (accelerometerSensor == null) {
             // This should never happen, but just in case...
-            Log.w(TAG, "Gyroscope sensor is not available on this device.");
+            Log.w(TAG, "Accelerometer sensor is not available on this device.");
             return;
         }
 
-        sensorManager.registerListener(this, gyroscopeSensor, SensorManager.SENSOR_DELAY_NORMAL);
-
+        sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     private void stopCollectingData() {
         Log.d(TAG, "stopCollectingData()");
-
         if (sensorManager != null) {
             sensorManager.unregisterListener(this);
         }
-
     }
 
     private Notification createNotification() {
@@ -75,26 +68,27 @@ public class GyroscopeService extends Service implements SensorEventListener {
 
         return new NotificationCompat.Builder(this, Constants.RECORDING_CHANNEL_ID)
                 .setContentTitle(getString(R.string.collecting))
-                .setContentText(getString(R.string.notif_gyroscope))
-                .setSmallIcon(R.drawable.ic_gyroscope)
+                .setContentText(getString(R.string.notif_accelerometer))
+                .setSmallIcon(R.drawable.ic_accelerometer)
                 .setContentIntent(pendingIntent)
-                .setTicker(getString(R.string.gyroscope_ticker))
+                .setTicker(getString(R.string.accelerometer_ticker))
                 .build();
     }
 
+    @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
 
     @Override
-    public void onSensorChanged(SensorEvent sensorEvent) {
-        // Process the gyroscope data here or simply discard it
-        Log.d(TAG, "Gyroscope data: " + sensorEvent.values[0] + ", " + sensorEvent.values[1] + ", " + sensorEvent.values[2]);
+    public void onSensorChanged(SensorEvent event) {
+        // Process accelerometer data or simply discard it
+        Log.d(TAG, "Accelerometer data: " + event.values[0] + ", " + event.values[1] + ", " + event.values[2]);
     }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // Not used
     }
 }

@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.ActivityCompat;
 
+import dev.kytta.uxdt_demo.collect.AccelerometerService;
 import dev.kytta.uxdt_demo.collect.GyroscopeService;
 import dev.kytta.uxdt_demo.collect.MicrophoneService;
 
@@ -65,6 +66,20 @@ public class MainActivity extends AppCompatActivity {
             });
         } else {
             gyroscopeSwitch.setEnabled(false);
+        }
+
+        SwitchCompat accelerometerSwitch = findViewById(R.id.accelerometer_switch);
+        if (availability.isAccelerometerAvailable()) {
+            accelerometerSwitch.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+                Intent service = new Intent(this, AccelerometerService.class);
+                if (isChecked) {
+                    startForegroundService(service);
+                } else {
+                    stopService(service);
+                }
+            });
+        } else {
+            accelerometerSwitch.setEnabled(false);
         }
     }
 }
