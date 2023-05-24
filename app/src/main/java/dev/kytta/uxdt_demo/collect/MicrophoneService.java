@@ -1,8 +1,6 @@
 package dev.kytta.uxdt_demo.collect;
 
 import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
@@ -11,10 +9,12 @@ import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.IBinder;
+import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
+import dev.kytta.uxdt_demo.Constants;
 import dev.kytta.uxdt_demo.MainActivity;
 import dev.kytta.uxdt_demo.R;
 
@@ -22,29 +22,17 @@ public class MicrophoneService extends Service {
     private static final String TAG = "MicrophoneService";
 
     private static final int NOTIFICATION_ID = 1;
-    private static final String CHANNEL_ID = "microphone_recording_status";
     private AudioRecord audioRecord;
     private boolean isRecording = false;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Microphone Status", NotificationManager.IMPORTANCE_LOW);
-        channel.setDescription("Will show a persistent notification when the app is recording the surroundings using the microphone.");
-        NotificationManager notificationManager = getSystemService(NotificationManager.class);
-        notificationManager.createNotificationChannel(channel);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent != null && intent.getAction() != null) {
-            if (intent.getAction().equals("ACTION_STOP_RECORDING")) {
-                stopRecording();
-                stopSelf();
-                return START_NOT_STICKY;
-            }
-        }
-
+        Log.d(TAG, "onStartCommand()");
         startRecording();
         startForeground(NOTIFICATION_ID, createNotification());
 
@@ -53,6 +41,7 @@ public class MicrophoneService extends Service {
 
     @Override
     public void onDestroy() {
+        Log.d(TAG, "onDestroy()");
         super.onDestroy();
         stopRecording();
     }
@@ -60,6 +49,7 @@ public class MicrophoneService extends Service {
     private void startRecording() {
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             // Permission is not granted; abort
+            stopSelf();
             return;
         }
 
@@ -86,19 +76,16 @@ public class MicrophoneService extends Service {
 
     private Notification createNotification() {
         Intent notificationIntent = new Intent(this, MainActivity.class);
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingIntent =
+                PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+        return new NotificationCompat.Builder(this, Constants.RECORDING_CHANNEL_ID)
+                .setContentTitle(getString(R.string.listening))
+                .setContentText(getString(R.string.notif_listening))
                 .setSmallIcon(R.drawable.ic_microphone)
-                .setContentTitle("Listening...")
-                .setContentText("The app is currently listening using the microphone.")
                 .setContentIntent(pendingIntent)
-                .setCategory(NotificationCompat.CATEGORY_SERVICE)
-                .setPriority(NotificationCompat.PRIORITY_LOW)
-                .setOngoing(true);
-
-        return builder.build();
+                .setTicker(getString(R.string.listening_ticker))
+                .build();
     }
 
     @Override

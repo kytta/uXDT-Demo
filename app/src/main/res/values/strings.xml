@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">uXDT Demo</string>
+
+    <string name="notification_channel_name">Recording status</string>
+    <string name="notification_channel_description">Notifications shown when the app is collecting data.</string>
+
+    <string name="listening">Listening…</string>
+    <string name="notif_listening">The app is currently listening using the microphone.</string>
+    <string name="listening_ticker">The application has started listening to the surroundings using the microphone.</string>
+
+    <string name="collecting">Collecting…</string>
+    <string name="notif_gyroscope">The app is currently collecting gyroscope data.</string>
+    <string name="gyroscope_ticker">The application has started collecting gyroscope data.</string>
 </resources>
