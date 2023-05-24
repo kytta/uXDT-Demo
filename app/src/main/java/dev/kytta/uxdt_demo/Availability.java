@@ -29,7 +29,7 @@ public class Availability {
      * @return true if the accelerometer is available, false otherwise
      */
     public boolean isAccelerometerAvailable() {
-        return sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER).size() > 0;
+        return sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null;
     }
 
     /**
@@ -38,6 +38,6 @@ public class Availability {
      * @return true if the gyroscope is available, false otherwise
      */
     public boolean isGyroscopeAvailable() {
-        return sensorManager.getSensorList(Sensor.TYPE_GYROSCOPE).size() > 0;
+        return sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE) != null;
     }
 }
