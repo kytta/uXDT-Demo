@@ -22,6 +22,7 @@ public class GyroscopeService extends Service implements SensorEventListener {
 
     private static final int NOTIFICATION_ID = 2;
     private SensorManager sensorManager;
+    private static boolean collecting = false;
 
     @Override
     public void onCreate() {
@@ -35,6 +36,10 @@ public class GyroscopeService extends Service implements SensorEventListener {
         startForeground(NOTIFICATION_ID, createNotification());
 
         return START_STICKY;
+    }
+
+    public static boolean isRunning() {
+        return collecting;
     }
 
     @Override
@@ -57,7 +62,7 @@ public class GyroscopeService extends Service implements SensorEventListener {
 
         Log.i(TAG, "Gyroscope sampling rate: " + 1000000 / gyroscopeSensor.getMinDelay() + " Hz");
         sensorManager.registerListener(this, gyroscopeSensor, SensorManager.SENSOR_DELAY_NORMAL);
-
+        collecting = true;
     }
 
     private void stopCollectingData() {
@@ -67,6 +72,7 @@ public class GyroscopeService extends Service implements SensorEventListener {
             sensorManager.unregisterListener(this);
         }
 
+        collecting = false;
     }
 
     private Notification createNotification() {
@@ -91,7 +97,7 @@ public class GyroscopeService extends Service implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         // Process the gyroscope data here or simply discard it
-        Log.d(TAG, "Gyroscope data: " + sensorEvent.values[0] + ", " + sensorEvent.values[1] + ", " + sensorEvent.values[2]);
+//        Log.d(TAG, "Gyroscope data: " + sensorEvent.values[0] + ", " + sensorEvent.values[1] + ", " + sensorEvent.values[2]);
     }
 
     @Override

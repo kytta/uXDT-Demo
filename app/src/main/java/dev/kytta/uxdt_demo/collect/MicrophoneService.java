@@ -23,7 +23,7 @@ public class MicrophoneService extends Service {
 
     private static final int NOTIFICATION_ID = 1;
     private AudioRecord audioRecord;
-    private boolean isRecording = false;
+    private static boolean recording = false;
 
     @Override
     public void onCreate() {
@@ -37,6 +37,10 @@ public class MicrophoneService extends Service {
         startForeground(NOTIFICATION_ID, createNotification());
 
         return START_STICKY;
+    }
+
+    public static boolean isRunning() {
+        return recording;
     }
 
     @Override
@@ -57,11 +61,11 @@ public class MicrophoneService extends Service {
         audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, 44100, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize);
         audioRecord.startRecording();
 
-        isRecording = true;
+        recording = true;
 
         new Thread(() -> {
             short[] buffer = new short[bufferSize];
-            while (isRecording) {
+            while (recording) {
                 audioRecord.read(buffer, 0, bufferSize);
                 // Process the audio data here or simply discard it
             }
@@ -71,7 +75,7 @@ public class MicrophoneService extends Service {
     }
 
     private void stopRecording() {
-        isRecording = false;
+        recording = false;
     }
 
     private Notification createNotification() {

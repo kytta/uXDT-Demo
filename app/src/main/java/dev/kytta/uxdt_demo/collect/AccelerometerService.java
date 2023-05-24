@@ -23,6 +23,12 @@ public class AccelerometerService extends Service implements SensorEventListener
 
     private static final int NOTIFICATION_ID = 3;
     private SensorManager sensorManager;
+    private static boolean collecting = false;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -31,6 +37,10 @@ public class AccelerometerService extends Service implements SensorEventListener
         startForeground(NOTIFICATION_ID, createNotification());
 
         return START_STICKY;
+    }
+
+    public static boolean isRunning() {
+        return collecting;
     }
 
     @Override
@@ -53,6 +63,7 @@ public class AccelerometerService extends Service implements SensorEventListener
 
         Log.i(TAG, "Accelerometer sampling rate: " + 1000000 / accelerometerSensor.getMinDelay() + " Hz");
         sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        collecting = true;
     }
 
     private void stopCollectingData() {
@@ -60,6 +71,8 @@ public class AccelerometerService extends Service implements SensorEventListener
         if (sensorManager != null) {
             sensorManager.unregisterListener(this);
         }
+
+        collecting = false;
     }
 
     private Notification createNotification() {

@@ -32,6 +32,10 @@ public class MainActivity extends AppCompatActivity {
         permissionManager.requestPostNotificationsPermission();
 
         SwitchCompat microphoneSwitch = findViewById(R.id.microphone_switch);
+        if (MicrophoneService.isRunning()) {
+            microphoneSwitch.setChecked(true);
+        }
+
         if (availability.isMicrophoneAvailable()) {
             microphoneSwitch.setOnCheckedChangeListener((compoundButton, isChecked) -> {
                 Intent service = new Intent(this, MicrophoneService.class);
@@ -55,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         SwitchCompat gyroscopeSwitch = findViewById(R.id.gyroscope_switch);
+        if (GyroscopeService.isRunning()) {
+            gyroscopeSwitch.setChecked(true);
+        }
+
         if (availability.isGyroscopeAvailable()) {
             gyroscopeSwitch.setOnCheckedChangeListener((compoundButton, isChecked) -> {
                 Intent service = new Intent(this, GyroscopeService.class);
@@ -69,6 +77,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         SwitchCompat accelerometerSwitch = findViewById(R.id.accelerometer_switch);
+        if (AccelerometerService.isRunning()) {
+            accelerometerSwitch.setChecked(true);
+        }
+
         if (availability.isAccelerometerAvailable()) {
             accelerometerSwitch.setOnCheckedChangeListener((compoundButton, isChecked) -> {
                 Intent service = new Intent(this, AccelerometerService.class);
