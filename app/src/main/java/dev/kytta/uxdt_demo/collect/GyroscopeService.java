@@ -1,4 +1,4 @@
-package dev.kytta.uxdt_demo;
+package dev.kytta.uxdt_demo.collect;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -11,10 +11,16 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.IBinder;
+import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
+import dev.kytta.uxdt_demo.MainActivity;
+import dev.kytta.uxdt_demo.R;
+
 public class GyroscopeService extends Service implements SensorEventListener {
+    private final String TAG = "GyroscopeService";
+
     private static final int NOTIFICATION_ID = 2;
     private static final String CHANNEL_ID = "gyroscope_collecting_status";
     private SensorManager sensorManager;
@@ -24,6 +30,7 @@ public class GyroscopeService extends Service implements SensorEventListener {
     @Override
     public void onCreate() {
         super.onCreate();
+
         NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Gyroscope Status", NotificationManager.IMPORTANCE_LOW);
         channel.setDescription("Will show a persistent notification when the app is collecting the gyroscope data.");
         NotificationManager notificationManager = getSystemService(NotificationManager.class);
@@ -32,8 +39,10 @@ public class GyroscopeService extends Service implements SensorEventListener {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d(TAG, "onStartCommand() called");
         if (intent != null && intent.getAction() != null) {
             if (intent.getAction().equals("ACTION_STOP_COLLECTING")) {
+                Log.d(TAG, "ACTION_STOP_COLLECTING received");
                 stopCollectingData();
                 stopSelf();
                 return START_NOT_STICKY;
@@ -53,11 +62,14 @@ public class GyroscopeService extends Service implements SensorEventListener {
     }
 
     private void startCollectingData() {
+        Log.d(TAG, "startCollectingData() called");
+
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         gyroscopeSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
 
         if (gyroscopeSensor == null) {
-            // Gyroscope sensor is not available on this device
+            // This should never happen, but just in case...
+            Log.w(TAG, "Gyroscope sensor is not available on this device.");
             return;
         }
 
@@ -67,6 +79,8 @@ public class GyroscopeService extends Service implements SensorEventListener {
     }
 
     private void stopCollectingData() {
+        Log.d(TAG, "stopCollectingData() called");
+
         if (sensorManager != null) {
             sensorManager.unregisterListener(this);
         }
@@ -99,6 +113,7 @@ public class GyroscopeService extends Service implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         // Process the gyroscope data here or simply discard it
+        Log.d(TAG, "Gyroscope data: " + sensorEvent.values[0] + ", " + sensorEvent.values[1] + ", " + sensorEvent.values[2]);
     }
 
     @Override

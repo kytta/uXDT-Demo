@@ -1,4 +1,4 @@
-package dev.kytta.uxdt_demo;
+package dev.kytta.uxdt_demo.collect;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -14,9 +14,13 @@ import android.os.IBinder;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
-import androidx.core.content.ContextCompat;
+
+import dev.kytta.uxdt_demo.MainActivity;
+import dev.kytta.uxdt_demo.R;
 
 public class MicrophoneService extends Service {
+    private static final String TAG = "MicrophoneService";
+
     private static final int NOTIFICATION_ID = 1;
     private static final String CHANNEL_ID = "microphone_recording_status";
     private AudioRecord audioRecord;
