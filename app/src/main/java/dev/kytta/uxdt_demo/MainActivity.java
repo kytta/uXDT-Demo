@@ -13,6 +13,7 @@ import androidx.core.app.ActivityCompat;
 import dev.kytta.uxdt_demo.collect.AccelerometerService;
 import dev.kytta.uxdt_demo.collect.GyroscopeService;
 import dev.kytta.uxdt_demo.collect.MicrophoneService;
+import dev.kytta.uxdt_demo.collect.Status;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -32,9 +33,22 @@ public class MainActivity extends AppCompatActivity {
         permissionManager.requestPostNotificationsPermission();
 
         SwitchCompat microphoneSwitch = findViewById(R.id.microphone_switch);
-        if (MicrophoneService.isRunning()) {
-            microphoneSwitch.setChecked(true);
-        }
+        SwitchCompat gyroscopeSwitch = findViewById(R.id.gyroscope_switch);
+        SwitchCompat accelerometerSwitch = findViewById(R.id.accelerometer_switch);
+        SwitchCompat gyroscopeBackgroundSwitch = findViewById(R.id.gyroscope_bg_switch);
+        SwitchCompat accelerometerBackgroundSwitch = findViewById(R.id.accelerometer_bg_switch);
+
+        microphoneSwitch.setChecked(MicrophoneService.isRunning());
+
+        gyroscopeSwitch.setEnabled(GyroscopeService.getStatus() != Status.RUNNING_IN_BACKGROUND);
+        gyroscopeSwitch.setChecked(GyroscopeService.getStatus() == Status.RUNNING_IN_FOREGROUND);
+        gyroscopeBackgroundSwitch.setEnabled(GyroscopeService.getStatus() != Status.RUNNING_IN_FOREGROUND);
+        gyroscopeBackgroundSwitch.setChecked(GyroscopeService.getStatus() == Status.RUNNING_IN_BACKGROUND);
+
+        accelerometerSwitch.setEnabled(AccelerometerService.getStatus() != Status.RUNNING_IN_BACKGROUND);
+        accelerometerSwitch.setChecked(AccelerometerService.getStatus() == Status.RUNNING_IN_FOREGROUND);
+        accelerometerBackgroundSwitch.setEnabled(AccelerometerService.getStatus() != Status.RUNNING_IN_FOREGROUND);
+        accelerometerBackgroundSwitch.setChecked(AccelerometerService.getStatus() == Status.RUNNING_IN_BACKGROUND);
 
         if (availability.isMicrophoneAvailable()) {
             microphoneSwitch.setOnCheckedChangeListener((compoundButton, isChecked) -> {
@@ -58,11 +72,6 @@ public class MainActivity extends AppCompatActivity {
             microphoneSwitch.setEnabled(false);
         }
 
-        SwitchCompat gyroscopeSwitch = findViewById(R.id.gyroscope_switch);
-        if (GyroscopeService.isRunning()) {
-            gyroscopeSwitch.setChecked(true);
-        }
-
         if (availability.isGyroscopeAvailable()) {
             gyroscopeSwitch.setOnCheckedChangeListener((compoundButton, isChecked) -> {
                 Intent service = new Intent(this, GyroscopeService.class);
@@ -72,14 +81,20 @@ public class MainActivity extends AppCompatActivity {
                     stopService(service);
                 }
             });
+            gyroscopeBackgroundSwitch.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+                Intent service = new Intent(this, GyroscopeService.class);
+                service.setAction(Constants.ACTION_RUN_IN_BACKGROUND);
+                if (isChecked) {
+                    startService(service);
+                } else {
+                    stopService(service);
+                }
+            });
         } else {
             gyroscopeSwitch.setEnabled(false);
+            gyroscopeBackgroundSwitch.setEnabled(false);
         }
 
-        SwitchCompat accelerometerSwitch = findViewById(R.id.accelerometer_switch);
-        if (AccelerometerService.isRunning()) {
-            accelerometerSwitch.setChecked(true);
-        }
 
         if (availability.isAccelerometerAvailable()) {
             accelerometerSwitch.setOnCheckedChangeListener((compoundButton, isChecked) -> {
@@ -90,8 +105,18 @@ public class MainActivity extends AppCompatActivity {
                     stopService(service);
                 }
             });
+            accelerometerBackgroundSwitch.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+                Intent service = new Intent(this, AccelerometerService.class);
+                service.setAction(Constants.ACTION_RUN_IN_BACKGROUND);
+                if (isChecked) {
+                    startService(service);
+                } else {
+                    stopService(service);
+                }
+            });
         } else {
             accelerometerSwitch.setEnabled(false);
+            accelerometerBackgroundSwitch.setEnabled(false);
         }
     }
 }

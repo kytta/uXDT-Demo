@@ -24,6 +24,7 @@ public class MicrophoneService extends Service {
     private static final int NOTIFICATION_ID = 1;
     private AudioRecord audioRecord;
     private static boolean recording = false;
+    private static Status status = Status.NOT_RUNNING;
 
     @Override
     public void onCreate() {
@@ -40,7 +41,11 @@ public class MicrophoneService extends Service {
     }
 
     public static boolean isRunning() {
-        return recording;
+        return status != Status.NOT_RUNNING;
+    }
+
+    public static Status getStatus() {
+        return status;
     }
 
     @Override
@@ -62,6 +67,7 @@ public class MicrophoneService extends Service {
         audioRecord.startRecording();
 
         recording = true;
+        status = Status.RUNNING_IN_FOREGROUND;
 
         new Thread(() -> {
             short[] buffer = new short[bufferSize];
@@ -76,6 +82,7 @@ public class MicrophoneService extends Service {
 
     private void stopRecording() {
         recording = false;
+        status = Status.NOT_RUNNING;
     }
 
     private Notification createNotification() {

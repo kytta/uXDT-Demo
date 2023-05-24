@@ -5,27 +5,79 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/microphone_switch"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
-        android:text="@string/microphone_switch_text"
-        android:checked="false" />
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical">
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/gyroscope_switch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
-        android:text="@string/gyroscope_switch_text"
-        android:checked="false" />
+        <TextView
+            style="@style/TextAppearance.MaterialComponents.Caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="8dp"
+            android:text="@string/using_foreground_service" />
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/accelerometer_switch"
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/microphone_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:paddingStart="32dp"
+            android:paddingEnd="16dp"
+            android:text="@string/microphone_switch_text" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/gyroscope_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:paddingStart="32dp"
+            android:paddingEnd="16dp"
+            android:text="@string/gyroscope_switch_text" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/accelerometer_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:paddingStart="32dp"
+            android:paddingEnd="16dp"
+            android:text="@string/accelerometer_switch_text" />
+    </LinearLayout>
+
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
-        android:text="@string/accelerometer_switch_text"
-        android:checked="false" />
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/TextAppearance.MaterialComponents.Caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="8dp"
+            android:text="@string/using_background_service" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/gyroscope_bg_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:paddingStart="32dp"
+            android:paddingEnd="16dp"
+            android:text="@string/gyroscope_switch_text" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/accelerometer_bg_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:paddingStart="32dp"
+            android:paddingEnd="16dp"
+            android:text="@string/accelerometer_switch_text" />
+    </LinearLayout>
 </LinearLayout>

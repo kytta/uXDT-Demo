@@ -23,7 +23,7 @@ public class AccelerometerService extends Service implements SensorEventListener
 
     private static final int NOTIFICATION_ID = 3;
     private SensorManager sensorManager;
-    private static boolean collecting = false;
+    private static Status status = Status.NOT_RUNNING;
 
     @Override
     public void onCreate() {
@@ -33,14 +33,22 @@ public class AccelerometerService extends Service implements SensorEventListener
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "onStartCommand()");
-        startCollectingData();
+
+        if (intent != null && intent.getAction() != null) {
+            if (intent.getAction().equals(Constants.ACTION_RUN_IN_BACKGROUND)) {
+                startCollectingData(true);
+                return START_STICKY;
+            }
+        }
+
+        startCollectingData(false);
         startForeground(NOTIFICATION_ID, createNotification());
 
         return START_STICKY;
     }
 
-    public static boolean isRunning() {
-        return collecting;
+    public static Status getStatus() {
+        return status;
     }
 
     @Override
@@ -49,7 +57,7 @@ public class AccelerometerService extends Service implements SensorEventListener
         stopCollectingData();
     }
 
-    private void startCollectingData() {
+    private void startCollectingData(boolean background) {
         Log.d(TAG, "startCollectingData()");
 
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -63,7 +71,9 @@ public class AccelerometerService extends Service implements SensorEventListener
 
         Log.i(TAG, "Accelerometer sampling rate: " + 1000000 / accelerometerSensor.getMinDelay() + " Hz");
         sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        collecting = true;
+
+        Log.i(TAG, "Started a " + (background ? "background" : "foreground") + " service");
+        status = background ? Status.RUNNING_IN_BACKGROUND : Status.RUNNING_IN_FOREGROUND;
     }
 
     private void stopCollectingData() {
@@ -72,7 +82,7 @@ public class AccelerometerService extends Service implements SensorEventListener
             sensorManager.unregisterListener(this);
         }
 
-        collecting = false;
+        status = Status.NOT_RUNNING;
     }
 
     private Notification createNotification() {
