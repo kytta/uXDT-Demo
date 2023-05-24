@@ -18,32 +18,21 @@ public class PermissionManager {
 
     private final ComponentActivity activity;
 
-    private ActivityResultLauncher<String> requestNotificationPermissionLauncher;
-    private ActivityResultLauncher<String> requestRecordAudioPermissionLauncher;
+    private ActivityResultLauncher<String> requestPermissionLauncher;
 
 
     public PermissionManager(ComponentActivity activity) {
         this.activity = activity;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            requestNotificationPermissionLauncher = activity.registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+            requestPermissionLauncher = activity.registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                 if (isGranted) {
-                    Log.i(TAG, "We can show notifications");
+                    Log.i(TAG, "Permission is granted");
                 } else {
-                    Log.w(TAG, "We cannot show notifications");
-                    showPostNotificationsPermissionRationale();
+                    Log.w(TAG, "Permission is not granted");
                 }
             });
         }
-
-        requestRecordAudioPermissionLauncher = activity.registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-            if (isGranted) {
-                Log.i(TAG, "We can record audio");
-            } else {
-                Log.w(TAG, "We cannot record audio");
-                showRecordAudioPermissionRationale();
-            }
-        });
     }
 
     public void requestPostNotificationsPermission() {
@@ -62,12 +51,13 @@ public class PermissionManager {
             showPostNotificationsPermissionRationale();
         } else {
             Log.i(TAG, "We should request notification permission");
-            requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
         }
     }
 
     /**
      * Requests permission to record audio.
+     *
      * @return true if user's decision is final, false otherwise
      */
     public boolean requestRecordAudioPermission() {
@@ -83,7 +73,7 @@ public class PermissionManager {
             return true;
         } else {
             Log.i(TAG, "We should request microphone permission");
-            requestRecordAudioPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO);
+            requestPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO);
             return false;
         }
     }
