@@ -18,21 +18,20 @@ public class PermissionManager {
 
     private final ComponentActivity activity;
 
-    private ActivityResultLauncher<String> requestPermissionLauncher;
+    private final ActivityResultLauncher<String> requestPermissionLauncher;
 
 
     public PermissionManager(ComponentActivity activity) {
         this.activity = activity;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            requestPermissionLauncher = activity.registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-                if (isGranted) {
-                    Log.i(TAG, "Permission is granted");
-                } else {
-                    Log.w(TAG, "Permission is not granted");
-                }
-            });
-        }
+        requestPermissionLauncher = activity.registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+            if (isGranted) {
+                Log.i(TAG, "Permission is granted");
+            } else {
+                Log.w(TAG, "Permission is not granted");
+            }
+        });
+
     }
 
     public void requestPostNotificationsPermission() {
