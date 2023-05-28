@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="using_foreground_service">Vordergrunddienst</string>
+    <string name="using_background_service">Hintergrunddienst</string>
+    <string name="microphone_switch_text">Umgebungsgeräusche aufnehmen</string>
+    <string name="gyroscope_switch_text">Gyroskopische Daten sammeln</string>
+    <string name="accelerometer_switch_text">Beschleunigungsdaten sammeln</string>
+    <string name="notification_channel_name">Status der Aufzeichnung</string>
+    <string name="notification_channel_description">Benachrichtigungen, die angezeigt werden, wenn die App Daten sammelt.</string>
+    <string name="listening">Hört zu…</string>
+    <string name="notif_listening">Die App hört derzeit über das Mikrofon.</string>
+    <string name="listening_ticker">Die Anwendung hat begonnen, die Umgebung über das Mikrofon abzuhören.</string>
+    <string name="collecting">Sammelt…</string>
+    <string name="notif_gyroscope">Die App sammelt derzeit Gyroskopdaten.</string>
+    <string name="gyroscope_ticker">Die Anwendung hat mit der Erfassung von Gyroskopdaten begonnen.</string>
+    <string name="notif_accelerometer">Die App sammelt derzeit Beschleunigungsdaten.</string>
+    <string name="accelerometer_ticker">Die Anwendung hat mit der Erfassung von Beschleunigungsdaten begonnen.</string>
+</resources>

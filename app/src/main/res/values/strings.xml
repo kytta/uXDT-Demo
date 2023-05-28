@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">uXDT Demo</string>
+    <string name="app_name" translatable="false">uXDT Demo</string>
 
     <string name="using_foreground_service">Using foreground service</string>
     <string name="using_background_service">Using background service</string>
